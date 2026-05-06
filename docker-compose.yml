@@ -3,6 +3,8 @@ services:
     image: mongo
     volumes:
       - mongo_data:/data/db
+    ports:
+      - "27071:27071"
 
   backend:
     build:
