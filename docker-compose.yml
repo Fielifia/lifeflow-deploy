@@ -6,7 +6,7 @@ services:
 
   backend:
     build:
-      context: ./lifeflow-backend
+      context: ../lifeflow-backend
     environment:
       - MONGO_URI=mongodb://mongo:27017/lifeflow
     depends_on:
@@ -14,7 +14,7 @@ services:
 
   frontend:
     build:
-      context: ./lifeflow-frontend/my-app
+      context: ../lifeflow-frontend/my-app
     depends_on:
       - backend
 
