@@ -17,6 +17,8 @@ services:
       context: ../lifeflow-frontend/my-app
     depends_on:
       - backend
+    ports:
+    - "80:80"
 
 volumes:
   mongo_data:
