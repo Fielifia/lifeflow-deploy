@@ -1,0 +1,12 @@
+services:
+  backend:
+    build:
+      target: production
+    ports:
+      - "5000:5000"
+    restart: always
+
+  frontend:
+    ports:
+      - "3000:80"
+    restart: always

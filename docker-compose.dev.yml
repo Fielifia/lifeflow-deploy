@@ -1,0 +1,13 @@
+services:
+  backend:
+    build:
+      target: development
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./lifeflow-backend:/usr/src/app
+      - /usr/src/app/node_modules
+
+  frontend:
+    ports:
+      - "3000:80"
