@@ -2,13 +2,19 @@ services:
   backend:
     build:
       target: production
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - TRUST_PROXY=1
     ports:
       - "5000:5000"
-    restart: always
 
   frontend:
     build:
       context: ../lifeflow-frontend/my-app
-    ports:
-      - "3000:80"
     restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
