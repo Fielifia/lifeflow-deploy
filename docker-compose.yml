@@ -9,7 +9,7 @@ services:
     build:
       context: ../lifeflow-backend
     environment:
-      - MONGO_URI=mongodb://mongo:27017/lifeflow
+      - MONGO_URI=${MONGO_URI}
     depends_on:
       - mongo
 
