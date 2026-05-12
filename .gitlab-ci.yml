@@ -1,0 +1,26 @@
+stages:
+  - deploy
+
+image: ubuntu:latest
+
+deploy-production:
+  stage: deploy
+
+  before_script:
+    - apt-get update -y
+    - apt-get install -y openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | sed 's/\\n/\n/g' > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+  script:
+    - |
+      ssh ubuntu@$PRODUCTION_HOST "
+        cd ~/lifeflow &&
+        cd lifeflow-backend && git pull &&
+        cd ../lifeflow-frontend && git pull &&
+        cd ../lifeflow-deploy && git pull &&
+        docker compose down &&
+        docker compose up -d --build
+      "
