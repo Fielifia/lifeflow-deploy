@@ -10,9 +10,9 @@ deploy-production:
     - apt-get update -y
     - apt-get install -y openssh-client
     - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" | sed id_ed25519
-    - chmod 600 ~/.ssh/id_ed25519
     - printf "%s" "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
   script:
     - |
