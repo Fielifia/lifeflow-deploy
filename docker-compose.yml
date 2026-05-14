@@ -16,14 +16,15 @@ services:
 
   frontend:
     build:
-      context: ../lifeflow-frontend/my-app
+      context: ../lifeflow-frontend/app
     depends_on:
       - backend
     ports:
-    - "80:80"
-    - "443:443"
+      - "80:80"
+      - "443:443"
     volumes:
-    - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot
 
 volumes:
   mongo_data:
