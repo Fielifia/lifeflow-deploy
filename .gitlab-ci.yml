@@ -1,3 +1,7 @@
+default:
+  artifacts:
+    expire_in: 1 day
+
 stages:
   - deploy
 
@@ -9,19 +13,46 @@ deploy-production:
   before_script:
     - apt-get update -y
     - apt-get install -y openssh-client
+
     - mkdir -p ~/.ssh
     - printf "%s" "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    - ssh-keygen -y -f ~/.ssh/id_ed25519
+
+    - ssh-keygen -y -f ~/.ssh/id_ed25519 > /dev/null
 
   script:
     - |
-      ssh ubuntu@$PRODUCTION_HOST "
-        cd ~/lifeflow &&
-        cd lifeflow-backend && git pull &&
-        cd ../lifeflow-frontend && git pull &&
-        cd ../lifeflow-deploy && git pull &&
-        docker compose down &&
-        docker compose up -d --build
-      "
+      ssh ubuntu@$PRODUCTION_HOST << 'EOF'
+
+        set -e
+
+        echo "=== Pulling latest changes ==="
+
+        cd ~/lifeflow/lifeflow-backend
+        git pull
+
+        cd ../lifeflow-frontend
+        git pull
+
+        cd ../lifeflow-deploy
+        git pull
+
+        echo "=== Validating docker compose ==="
+
+        docker compose config
+
+        echo "=== Deploying ==="
+
+        docker compose up -d --build --remove-orphans
+
+        echo "=== Cleaning old images ==="
+
+        docker image prune -f
+
+        echo "=== Deployment complete ==="
+
+      EOF
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
