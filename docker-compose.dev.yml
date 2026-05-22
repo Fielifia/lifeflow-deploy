@@ -2,17 +2,22 @@ services:
   backend:
     build:
       target: development
+
     ports:
       - "5000:5000"
+
     volumes:
       - ../lifeflow-backend:/usr/src/app
       - /usr/src/app/node_modules
 
-  frontend:
-    build:
-      context: ../lifeflow-frontend/app
-    ports:
-      - "3000:3000"
-    volumes:
-      - ../lifeflow-frontend/app:/usr/src/app
-      - /usr/src/app/node_modules
+frontend:
+  build:
+    context: ../lifeflow-frontend/app
+    target: development
+
+  ports:
+    - "3000:3000"
+
+  volumes:
+    - ../lifeflow-frontend/app:/usr/src/app
+    - /usr/src/app/node_modules
