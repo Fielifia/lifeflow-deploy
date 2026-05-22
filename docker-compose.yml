@@ -1,31 +1,53 @@
 services:
   mongo:
     image: mongo
+
     volumes:
       - mongo_data:/data/db
+
     ports:
       - "27017:27017"
 
   backend:
     build:
       context: ../lifeflow-backend
+
     environment:
       - MONGO_URI=${MONGO_URI}
+
     depends_on:
       - mongo
+
+    healthcheck:
+      test: 
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://localhost:5000').then(()=>process.exit(0)).catch(()=>process.exit(1))"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: unless-stopped
 
   frontend:
     build:
       context: ../lifeflow-frontend/app
+
     depends_on:
       - backend
+
     ports:
       - "80:80"
       - "443:443"
+
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/www/certbot:/var/www/certbot
 
+    restart: unless-stopped
+
 volumes:
   mongo_data:
-  
