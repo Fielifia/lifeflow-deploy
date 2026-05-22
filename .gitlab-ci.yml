@@ -44,7 +44,8 @@ deploy-production:
 
         echo "=== Deploying ==="
 
-        docker compose up -d --build --remove-orphans
+        docker compose build --no-cache
+        docker compose up -d --remove-orphans
 
         echo "=== Cleaning old images ==="
 
