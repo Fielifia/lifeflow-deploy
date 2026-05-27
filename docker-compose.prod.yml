@@ -8,6 +8,7 @@ services:
     environment:
       - NODE_ENV=production
       - MONGO_URI=${MONGO_URI}
+      - CLIENT_URLS=${CLIENT_URLS}
 
   frontend:
     image: gitlab.lnu.se:5050/1dv613/student/sa226jf/workspace/lifeflow-frontend:latest
