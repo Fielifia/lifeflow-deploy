@@ -1,6 +1,6 @@
 services:
   backend:
-    image: registry.gitlab.lnu.se/1dv613/student/sa226jf/workspace/lifeflow-backend:${IMAGE_TAG}
+    image: gitlab.lnu.se:5050/1dv613/student/sa226jf/workspace/lifeflow-backend:${IMAGE_TAG}
 
     expose:
       - "5000"
@@ -10,7 +10,7 @@ services:
       - MONGO_URI=${MONGO_URI}
 
   frontend:
-    image: registry.gitlab.lnu.se/1dv613/student/sa226jf/workspace/lifeflow-frontend:${IMAGE_TAG}
+    image: gitlab.lnu.se:5050/1dv613/student/sa226jf/workspace/lifeflow-frontend:${IMAGE_TAG}
 
     ports:
       - "80:80"
