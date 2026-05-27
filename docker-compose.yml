@@ -8,29 +8,37 @@ services:
       - mongo_data:/data/db
 
   backend:
+    image: gitlab.lnu.se:5050/1dv613/student/sa226jf/workspace/lifeflow-backend:latest
+
     environment:
+      - NODE_ENV=production
       - MONGO_URI=${MONGO_URI}
+      - CLIENT_URLS=${CLIENT_URLS}
+
+    env_file:
+      - .env
+
+    expose:
+      - "5000"
 
     depends_on:
       - mongo
 
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "node",
-          "-e",
-          "fetch('http://localhost:5000').then(()=>process.exit(0)).catch(()=>process.exit(1))"
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
     restart: unless-stopped
 
   frontend:
+    image: gitlab.lnu.se:5050/1dv613/student/sa226jf/workspace/lifeflow-frontend:latest
+
+    ports:
+      - "80:80"
+      - "443:443"
+
     depends_on:
       - backend
+
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot
 
     restart: unless-stopped
 
