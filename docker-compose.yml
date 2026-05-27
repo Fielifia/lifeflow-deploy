@@ -20,7 +20,7 @@ services:
           "CMD",
           "node",
           "-e",
-          "fetch('http://localhost:5000/api/health').then(()=>process.exit(0)).catch(()=>process.exit(1))"
+          "fetch('http://localhost:5000').then(()=>process.exit(0)).catch(()=>process.exit(1))"
         ]
       interval: 10s
       timeout: 5s
