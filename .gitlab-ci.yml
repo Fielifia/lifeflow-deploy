@@ -27,6 +27,8 @@ deploy-production:
 
         cd ~/lifeflow/deploy
 
+        git pull
+
         docker login gitlab.lnu.se:5050 \
           -u "$CI_REGISTRY_USER" \
           -p "$CI_REGISTRY_PASSWORD"
