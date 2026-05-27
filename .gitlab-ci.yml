@@ -21,7 +21,6 @@ deploy-production:
   script:
     - |
       ssh ubuntu@$PRODUCTION_HOST << EOF
-        export IMAGE_TAG=$IMAGE_TAG
 
         set -e
 
