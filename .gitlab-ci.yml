@@ -21,12 +21,11 @@ deploy-production:
   script:
     - |
       ssh ubuntu@$PRODUCTION_HOST << EOF
+        export IMAGE_TAG=$IMAGE_TAG
 
         set -e
 
         cd ~/lifeflow/deploy
-
-        export IMAGE_TAG=${IMAGE_TAG}
 
         docker login gitlab.lnu.se:5050 \
           -u "$CI_REGISTRY_USER" \
