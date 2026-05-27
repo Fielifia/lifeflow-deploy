@@ -5,61 +5,44 @@ default:
 stages:
   - deploy
 
-image: ubuntu:latest
-
 deploy-production:
   stage: deploy
 
+  image: alpine:latest
+
   before_script:
-    - apt-get update -y
-    - apt-get install -y openssh-client
+    - apk add --no-cache openssh-client
 
     - mkdir -p ~/.ssh
     - printf "%s" "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
-    - ssh-keygen -y -f ~/.ssh/id_ed25519 > /dev/null
-
   script:
     - |
-      ssh ubuntu@$PRODUCTION_HOST << 'EOF'
+      ssh ubuntu@$PRODUCTION_HOST << EOF
 
         set -e
 
-        echo "=== Pulling latest changes ==="
+        cd ~/lifeflow/deploy
 
-        cd ~/lifeflow/lifeflow-backend
-        git pull
+        export IMAGE_TAG=${IMAGE_TAG}
 
-        cd ../lifeflow-frontend
-        git pull
-
-        cd ../lifeflow-deploy
-        git pull
-
-        echo "=== Validating docker compose ==="
+        docker login registry.gitlab.lnu.se \
+          -u "$CI_REGISTRY_USER" \
+          -p "$CI_REGISTRY_PASSWORD"
 
         docker compose \
           -f docker-compose.yml \
           -f docker-compose.prod.yml \
-          config
-
-        docker compose \
-          -f docker-compose.yml \
-          -f docker-compose.prod.yml \
-          build --no-cache
+          pull
 
         docker compose \
           -f docker-compose.yml \
           -f docker-compose.prod.yml \
           up -d --remove-orphans --wait
 
-        echo "=== Cleaning old images ==="
-
         docker image prune -f
-
-        echo "=== Deployment complete ==="
 
       EOF
 
