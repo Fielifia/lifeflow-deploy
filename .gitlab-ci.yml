@@ -29,8 +29,8 @@ deploy-production:
         git pull
 
         docker login gitlab.lnu.se:5050 \
-          -u "$CI_REGISTRY_USER" \
-          -p "$CI_REGISTRY_PASSWORD"
+          -u "$REGISTRY_USER" \
+          -p "$REGISTRY_PASSWORD"
 
         docker compose \
           -f docker-compose.yml \
