@@ -9,7 +9,7 @@ services:
 
   backend:
     build:
-      context: ../lifeflow-backend
+      context: ../backend
       target: production
 
     environment:
@@ -30,7 +30,7 @@ services:
 
   frontend:
     build:
-      context: ../lifeflow-frontend
+      context: ../frontend
       target: production
 
     ports:
