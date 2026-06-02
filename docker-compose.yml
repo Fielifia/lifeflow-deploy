@@ -8,7 +8,9 @@ services:
       - mongo_data:/data/db
 
   backend:
-    image: gitlab.lnu.se:5050/1dv613/student/sa226jf/workspace/lifeflow-backend:latest
+    build:
+      context: ../lifeflow-backend
+      target: production
 
     environment:
       - NODE_ENV=production
@@ -27,7 +29,9 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: gitlab.lnu.se:5050/1dv613/student/sa226jf/workspace/lifeflow-frontend:latest
+    build:
+      context: ../lifeflow-frontend
+      target: production
 
     ports:
       - "80:80"
